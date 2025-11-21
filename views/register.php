@@ -62,5 +62,67 @@
     </form>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.querySelector("form").addEventListener("submit", function(e) {
+
+    let username = document.querySelector("input[name='username']").value.trim();
+    let email = document.querySelector("input[name='email']").value.trim();
+    let pass = document.querySelector("input[name='password']").value.trim();
+    let confirm = document.querySelector("input[name='confirm']").value.trim();
+
+    if (!username || !email || !pass || !confirm) {
+        e.preventDefault();
+        Swal.fire({
+            icon: "warning",
+            title: "Campos incompletos",
+            text: "Por favor llena todos los campos antes de continuar",
+        });
+        return;
+    }
+
+    if (pass !== confirm) {
+        e.preventDefault();
+        Swal.fire({
+            icon: "error",
+            title: "Contraseñas no coinciden",
+            text: "Verifica que ambas contraseñas sean iguales",
+        });
+        return;
+    }
+});
+</script>
+
+<?php if (isset($_GET["nomatch"])): ?>
+<script>
+Swal.fire({
+    icon: "error",
+    title: "Las contraseñas no coinciden",
+    text: "Debes escribir la misma contraseña en ambos campos.",
+});
+</script>
+<?php endif; ?>
+
+<?php if (isset($_GET["error"])): ?>
+<script>
+Swal.fire({
+    icon: "error",
+    title: "Error al registrar",
+    text: "Ocurrió un problema. Intenta nuevamente.",
+});
+</script>
+<?php endif; ?>
+
+<?php if (isset($_GET["registered"])): ?>
+<script>
+Swal.fire({
+    icon: "success",
+    title: "¡Registro exitoso!",
+    text: "Ahora puedes iniciar sesión.",
+});
+</script>
+<?php endif; ?>
+
 </body>
 </html>

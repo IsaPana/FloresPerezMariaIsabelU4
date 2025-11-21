@@ -17,7 +17,6 @@ $contacts = $contact->getAll($_SESSION["user_id"]);
     <title>Agenda de Contactos</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
 </head>
 <body class="bg-light">
 
@@ -71,9 +70,8 @@ $contacts = $contact->getAll($_SESSION["user_id"]);
                                 data-bs-toggle="modal"
                                 data-bs-target="#modalEdit">Editar</button>
 
-                            <a href="../controllers/ContactController.php?action=delete&id=<?= $c["id"] ?>"
-                               class="btn btn-sm btn-danger"
-                               onclick="return confirm('¿Eliminar contacto?')">Eliminar</a>
+                            <a href="#" class="btn btn-sm btn-danger"
+                               onclick="confirmDelete(<?= $c['id'] ?>)">Eliminar</a>
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -142,8 +140,60 @@ function editContact(c) {
     document.getElementById("edit-email").value = c.email;
     document.getElementById("edit-notes").value = c.notes;
 }
+
+function confirmDelete(id) {
+    Swal.fire({
+        title: "¿Eliminar contacto?",
+        text: "Esta acción no se puede deshacer",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = "../controllers/ContactController.php?action=delete&id=" + id;
+        }
+    });
+}
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<?php if (isset($_GET["added"])): ?>
+<script>
+Swal.fire({
+    icon: "success",
+    title: "Contacto agregado",
+    timer: 1500,
+    showConfirmButton: false
+});
+</script>
+<?php endif; ?>
+
+<?php if (isset($_GET["updated"])): ?>
+<script>
+Swal.fire({
+    icon: "success",
+    title: "Contacto actualizado",
+    timer: 1500,
+    showConfirmButton: false
+});
+</script>
+<?php endif; ?>
+
+<?php if (isset($_GET["deleted"])): ?>
+<script>
+Swal.fire({
+    icon: "success",
+    title: "Contacto eliminado",
+    timer: 1500,
+    showConfirmButton: false
+});
+</script>
+<?php endif; ?>
+
 </body>
 </html>
